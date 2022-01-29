@@ -4,6 +4,7 @@
   header("Access-Control-Allow-Methods: PUT, GET, POST, DELETE");
   header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
 
+  // Use your own details if cloning
   $servername = "localhost";
   $dbname = "runaway";
   $username = "root";
