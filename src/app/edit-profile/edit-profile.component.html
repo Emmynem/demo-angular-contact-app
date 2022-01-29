@@ -1,0 +1,86 @@
+
+<ng-container *ngIf="edit_profile_error == undefined">
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+    
+        <label for="first-name">First Name: </label>
+        <input id="first-name" type="text" class="form-control" formControlName="firstName">
+    
+        <label for="last-name">Last Name: </label>
+        <input id="last-name" type="text" class="form-control" formControlName="lastName">
+    
+        <label for="phone-number">Phone Number: </label>
+        <input id="phone-number" type="text" class="form-control" formControlName="phoneNumber">
+    
+        <!-- <div formGroupName="address"> -->
+        <h5>Address</h5>
+    
+        <label for="street">Street: </label>
+        <input id="street" type="text" class="form-control" formControlName="street">
+    
+        <label for="city">City: </label>
+        <!-- <input id="city" type="text" class="form-control" formControlName="city"> -->
+        <select id="city" type="text" class="form-control" formControlName="city">
+            <option value="" disabled selected>--Select Area--</option>
+            <option *ngFor="let lga of lgas" value="{{lga}}">{{lga}}</option>
+        </select>
+    
+        <label for="state">State: </label>
+        <!-- <input id="state" type="text" class="form-control" formControlName="state"> -->
+        <select id="state" type="text" class="form-control" formControlName="state">
+            <option value="" disabled selected>--Select State--</option>
+            <option *ngFor="let state of all_states" value="{{state}}">{{state}}</option>
+        </select>
+        <!-- <p class="text-danger mt-2" *ngIf="profileForm.state.errors?.['required']">Select State</p> -->
+    
+        <label for="zip">Zip Code: </label>
+        <input id="zip" type="text" class="form-control" formControlName="zip">
+        <!-- </div> -->
+    
+        <!-- <div formArrayName="aliases">
+            <h2>Aliases</h2>
+            <button class="btn btn-info" (click)="addAlias()" type="button">+ Add another alias</button>
+    
+            <div *ngFor="let alias of aliases.controls; let i=index">
+                The repeated alias template
+                <label for="alias-{{ i }}">Alias:</label>
+                <input id="alias-{{ i }}" type="text" class="form-control" [formControlName]="i">
+            </div>
+        </div> -->
+    
+        <p>Complete the form to enable button.</p>
+        <button type="submit" class="btn btn-success" [disabled]="!profileForm.valid"><span *ngIf="show_spinner"
+                class="spinner-border spinner-border-sm"></span> Save changes</button>
+    
+        <!-- <div class="mt-3">
+            <button class="btn btn-primary" (click)="updateProfile()">Update Profile</button>
+        </div> -->
+    
+        <!-- <div class="col-12 mt-3">
+            <p>Status : {{profileForm.status}}</p>
+        </div> -->
+    
+        <!-- <div class="col-12 mt-3">
+            <p> Data : {{profileForm.value | json}}</p>
+        </div> -->
+    
+    </form>
+
+    <ng-container *ngIf="save_profile_success">
+        <div class="alert alert-success mt-3">
+            <strong>Success!</strong> {{save_profile_success}}
+        </div>
+    </ng-container>
+    
+    <ng-container *ngIf="save_profile_error">
+        <div class="alert alert-danger mt-3">
+            <strong>Error!</strong> {{save_profile_error}}
+        </div>
+    </ng-container>
+</ng-container>
+
+<ng-container *ngIf="edit_profile_error != undefined">
+    <div class="alert alert-danger">
+        <strong>Error!</strong> {{edit_profile_error}}
+    </div>
+    <a href="/profile-editor">Add profile</a>
+</ng-container>

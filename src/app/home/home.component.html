@@ -1,0 +1,132 @@
+<div style="text-align:center">
+  <h1>
+    Welcome to {{ title }}!
+  </h1>
+  <img width="250" alt="Angular Logo"
+    src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+</div>
+
+<ng-container *ngIf="profiles_error == undefined">
+    
+    <div class="row">
+        <div class="col-12 mb-5">
+            <button type="button" class="btn btn-success mr-3">
+                Active <span class="badge badge-light">{{activeCount}}</span>
+            </button>
+            <button type="button" class="btn btn-danger mr-3">
+                Deleted <span class="badge badge-light">{{deletedCount}}</span>
+            </button>
+        </div>
+        <div class="col-12 col-lg-6" *ngFor="let profile of profiles; let i = index">
+            <div class="card mb-5">
+                <div class="card-body">
+                    <span *ngIf="profile.status == 1" class="badge badge-success float-right">Active</span>
+                    <span *ngIf="profile.status == 0" class="badge badge-danger float-right">Deleted</span>
+                    <h4 class="card-title">{{profile.fullname}}</h4> 
+                    <p class="card-text">Contact : {{profile.phone_number}}</p>
+                    <!-- <p class="card-text">Address : {{profile.street}}, {{profile.city}}, {{profile.state}}</p> -->
+                    <!-- <p class="card-text">Zip code : {{profile.zip_code != null ? profile.zip_code : "No zip code"}}</p> -->
+                    <p class="card-text">Added : {{profile.added_date | date}} {{profile.added_date | date:'shortTime'}}</p>
+                    <!-- <p class="card-text">Modified : {{profile.last_modified | date}} {{profile.last_modified | date:'shortTime'}}</p> -->
+                    <button [disabled]="profile.status == 0" type="button" class="btn btn-primary mr-3" (click)="querySingleProfile(profile.id)">View profile</button>
+                    <a *ngIf="profile.status == 1" class="card-link" (click)="deleteProfile(profile.id)">Delete profile</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav aria-label="" class="mt-3 text-center">
+        <ul class="pagination pagination-lg justify-content-center">
+            <li class="page-item"><a class="page-link" title="First Page" style="cursor: pointer;"
+                    (click)="firstPage()"><i class="fas fa-angle-left"></i> First </a></li>
+            <li class="page-item" [hidden]="hidePrev()"><a class="page-link" title="Previous Page" style="cursor: pointer;" 
+                    (click)="PrevPage()"><i class="fas fa-angle-left"></i> &#8592; </a></li>
+            <li class="page-item active"><a class="page-link" title="Current Page">{{currentPage}}</a></li>
+            <li class="page-item"><a class="page-link">...</a></li>
+            <li class="page-item"><a class="page-link" title="Total Number Of Pages">{{pages}}</a></li>
+            <li class="page-item" [hidden]="hideNext()"><a class="page-link" title="Next Page" style="cursor: pointer;" 
+                    (click)="nextPage()"><i class="fas fa-angle-right"></i> &#8594; </a></li>
+            <li class="page-item"><a class="page-link" title="Last Page" style="cursor: pointer;" (click)="lastPage()"><i
+                        class="fas fa-angle-left"></i> Last </a></li>
+        </ul>
+    </nav>
+</ng-container>
+
+<ng-container *ngIf="profiles_error != undefined">
+    <div class="alert alert-danger">
+        <strong>Error!</strong> {{profiles_error}}
+    </div>
+    <a href="/profile-editor">Add profile</a>
+</ng-container>
+
+<!-- The Modal -->
+<div class="modal" id="displayModal" [ngStyle]="{'display':displayDetails}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Contact details</h4>
+                <button type="button" class="close" (click)="onCloseHandled()">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="card mb-5">
+                    <div class="card-body">
+                        <h4 class="card-title">{{single_profile.fullname}}</h4>
+                        <p class="card-text">Contact : {{single_profile.phone_number}}</p>
+                        <p class="card-text">Address : {{single_profile.street}}, {{single_profile.city}}, {{single_profile.state}}</p>
+                        <p class="card-text">Zip code : {{single_profile.zip_code != null ? single_profile.zip_code : "No zip code"}}</p>
+                        <p class="card-text">Added : {{single_profile.added_date | date}} {{single_profile.added_date | date:'shortTime'}}</p>
+                        <p class="card-text">Modified : {{single_profile.last_modified | date}} {{single_profile.last_modified | date:'shortTime'}}</p>
+                        <a [routerLink]="['/edit-profile', single_profile.id]" class="card-link">Edit profile</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" (click)="onCloseHandled()">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="deleteModal" [ngStyle]="{'display':displayDeleteModal}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Delete contact</h4>
+                <button type="button" class="close" (click)="removeDeleteModal()">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <p class="mb-4">Are you sure you want to continue ?</p>
+                
+                <ng-container *ngIf="delete_profile_success">
+                    <div class="alert alert-success">
+                        <strong>Success!</strong> {{delete_profile_success}}
+                    </div>
+                </ng-container>
+
+                <ng-container *ngIf="delete_profile_error">
+                    <div class="alert alert-danger">
+                        <strong>Error!</strong> {{delete_profile_error}}
+                    </div>
+                </ng-container>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" (click)="delete_now()"><span *ngIf="show_spinner" class="spinner-border spinner-border-sm"></span> Delete</button>
+                <button type="button" class="btn btn-danger" (click)="removeDeleteModal()">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
