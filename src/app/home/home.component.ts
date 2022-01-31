@@ -49,9 +49,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     delete_id = "";
 
     constructor(private dataService: DataService) {
-        setTimeout(() => {
-            this.allowNewServer = true;
-        }, 5000);
     }
 
     ngOnInit() {
@@ -94,7 +91,6 @@ export class HomeComponent implements OnInit, OnDestroy {
                 }
                 else if (data.notFound == 2) {
                     this.profiles_error = "No profile found";
-
                 }
                 else {
                     this.profiles_error = "An error occured";
@@ -129,8 +125,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     delete_now() {
-        // var deleteFormData = new FormData();
-        // deleteFormData.append('id', this.delete_id);
         this.show_spinner = true;
         const data = {
             id: this.delete_id
@@ -221,55 +215,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     // Navigation code end
 
     title = 'Profiles App';
-
-    servers: string[] = [];
-
-    allowNewServer: boolean = false;
-
-    todaydate: Date = new Date();
-    today_date_alt: string = "2021-12-20 15:30:40";
-    file_storage = 5000000000;
-    jsonval: object = { name: 'Alex', age: '25', address: { a1: 'Paris', a2: 'France' } };
-    months: string[] = ['Jan', 'Feb', 'Mar', 'April', 'May', 'Jun', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
-
-    favoriteColor = '';
-    favoriteColorControl = new FormControl('');
-
-    do_changes() {
-        console.log(this.favoriteColor + "D<JKJSD");
-    }
-
-    OnAddServer() {
-        const inde = this.servers.length;
-        const name = "          ";
-        if (inde == 0) {
-            this.servers.push("First server added");
-        }
-        else if (inde % 2 == 0) {
-            // This checks if the name exists and if it exists it trims it of all spaces
-            // If not then it says "<no name set>"
-            this.servers.push((name && name.trim()) || '<no name set>');
-        }
-        else {
-            this.servers.push("Server added");
-        }
-    }
-
-    onRemoveServer(id: number) {
-        const position = id;
-        if (position == 0) {
-            const do_confirm = confirm("Do you want to delete the first element ?");
-            if (do_confirm) {
-                this.servers.splice(position, 1);
-            }
-            else {
-
-            }
-        }
-        else {
-            this.servers.splice(position, 1);
-        }
-    }
 
     /*
         Notes: 
