@@ -24,21 +24,10 @@ export class ProfileEditorComponent implements OnInit {
   public profileForm: FormGroup;
 
   constructor(private fb: FormBuilder, private lgasService: LgasService, private router: Router, private dataService: DataService) { 
-    // Use this if you no like stress
     this.profileForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25)]],
       lastName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25)]],
       phoneNumber: ['', [Validators.required, Validators.pattern('([- +()0-9]{6,14})|([0][7-9][0-1][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9])')]],
-      // Used to group inputs together when collecting their values
-      // address: this.fb.group({
-      //   street: [this.state, [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
-      //   city: ["", [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
-      //   state: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
-      //   zip: ['']
-      // }),
-      // aliases: this.fb.array([
-      //   this.fb.control('')
-      // ])
       street: [this.state, [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
       city: ["", [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
       state: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
@@ -56,7 +45,6 @@ export class ProfileEditorComponent implements OnInit {
 
   onSubmit() {
     // TODO: Use EventEmitter with form value
-    // console.warn(this.profileForm.value);
     this.show_spinner = true;
     this.dataService.postRequest(this.profileForm.value, this.saveProfilePath)
       .subscribe((data: any) => {
@@ -84,17 +72,6 @@ export class ProfileEditorComponent implements OnInit {
 
   onChanges() {
     this.changed_state;
-    // this.profileForm.controls['address'].valueChanges.subscribe(selectedValue => {
-    //   if (selectedValue.state != "" && selectedValue.state != this.changed_state && selectedValue.city != "") {
-    //     this.profileForm.patchValue({ 
-    //       address : {
-    //         city : ""
-    //       }
-    //     }, {emitEvent : false});
-    //   }
-    //   this.changed_state = selectedValue.state;
-    //   this.change_lgas(selectedValue.state);
-    // });
     this.profileForm.controls['state'].valueChanges.subscribe(selectedValue => {
       if (selectedValue != "" && selectedValue != this.changed_state && this.city.value != "") {
         this.profileForm.patchValue({
@@ -113,22 +90,6 @@ export class ProfileEditorComponent implements OnInit {
   change_lgas (state : string){
     this.lgas = this.lgasService.changeLGA(state);
   }
-  
-  // Use this if you like stress
-  // profileForm = new FormGroup({
-  //   firstName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(25)]),
-  //   lastName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(25)]),
-  //   phoneNumber: new FormControl('', [Validators.required, Validators.pattern('([- +()0-9]{6,14})|([0][7-9][0-1][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9])')]),
-  //   address: new FormGroup({
-  //     street: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]),
-  //     city: new FormControl(this.city, [Validators.required, Validators.minLength(2), Validators.maxLength(30)]),
-  //     state: new FormControl(this.state, [Validators.required, Validators.minLength(2), Validators.maxLength(30)]),
-  //     zip: new FormControl('')
-  //   }),
-  //   aliases: new FormArray([
-  //     new FormControl('')
-  //   ])
-  // });
 
   get aliases() {
     return this.profileForm.get('aliases') as FormArray;
