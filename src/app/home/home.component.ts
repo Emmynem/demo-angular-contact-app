@@ -187,7 +187,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     lastPage() {
         if (this.currentPage != this.pages) {
             this.currentPage = this.pages;
-            // damn this nigga for giving me a hard time
             var divide = this.totalCount / this.numLimit;
             var modulus = this.totalCount % this.numLimit;
             var roundDivide = Math.floor(divide);
